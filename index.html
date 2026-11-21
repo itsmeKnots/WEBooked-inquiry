@@ -207,7 +207,7 @@
 
 <script>
   // 1) Paste your Make webhook URL here (Webhooks > Custom webhook > copy address)
-  const WEBHOOK_URL = "https://hook.us2.make.com/tydwyzhxe6f9ai7jkps9t4msj5jcffbi";
+  const WEBHOOK_URL = "PASTE_YOUR_MAKE_WEBHOOK_URL_HERE";
 
   const form = document.getElementById("inquiry");
   const statusEl = document.getElementById("status");
@@ -243,14 +243,17 @@
       return;
     }
 
+    // Remove characters that would break the JSON request Make sends to the AI model
+    const clean = (s) => s.replace(/\\/g, "").replace(/"/g, "'").replace(/[\r\n\t]+/g, " ").trim();
+
     const body = new URLSearchParams({
-      name: form.name.value.trim(),
+      name: clean(form.name.value),
       email: form.email.value.trim(),
-      phone: form.phone.value.trim(),
+      phone: clean(form.phone.value),
       service: form.service.value,
       budget: form.budget.value,
       timeline: form.timeline.value,
-      message: form.message.value.trim(),
+      message: clean(form.message.value),
       submitted_at: new Date().toISOString()
     });
 
